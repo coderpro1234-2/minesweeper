@@ -92,9 +92,11 @@
   b.innerHTML = "Board: " + width + "x" + height
   m.innerHTML = "Mines: " + minesnum
   expandactive = 0
-  expandtile = []
+  pressTimer = 0
   firsttile = true
-  alive = true
+  alive = true 
+  oneoff = false
+  expandtile = []
   tiles = []
   mines = []
   flags = [-1]
@@ -116,7 +118,7 @@
       e = 0
       while (e < width) {
         tiles.push(0)
-        board += "<button id='" + id + "' onclick='pushbutton(" + id + ",true)' onmousedown='checkrightclick(" + id + ",event,false)'>?</button>"
+        board += "<button id='" + id + "' onclick='pushbutton(" + id + ",true)' onmousedown='longtap("+id+",event)' onmouseup='clearTimeout(pressTimer)'>?</button>"
         id += 1
         e++
       }
@@ -207,6 +209,14 @@
     if (mines.includes(getblock(tile, "ul"))) { e++ }
     return e
   }
+  function longtap(id,e) {
+    if (e.which == 3){
+      checkrightclick(id,"secret",true)
+    }
+    else {
+      pressTimer = window.setTimeout(function() {checkrightclick(id,"secret",true);oneoff = true},300)
+    }
+  }
   function checkrightclick(id, e, force) {
     if (e.which == 3 || force) {
       if (flags.includes(id)) {
@@ -244,6 +254,10 @@
     }
   }
   function pushbutton(id,clicked = false) {
+    if (oneoff) {
+      oneoff = false
+      return;
+    }
     if (alive == false) {
       return;
     }
