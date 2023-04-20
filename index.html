@@ -8,13 +8,11 @@
     body {
       background-color: rgb(74, 192, 253);
     }
-
     #board {
       border: 3px solid black;
       width: max-content;
       padding: 0px;
     }
-
     button {
       padding: 4px;
       margin: 0px;
@@ -24,13 +22,42 @@
       width: 22px;
       height: 26px;
     }
+    .disable-select {
+      user-select: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      }
+      .enable-select {
+        user-select: text;
+        -webkit-user-select: text;
+        -khtml-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+      }
+      .offscreen {
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: rgba(167, 167, 167, 0.438);
+        width: 100%;
+        height: 100%;
+      }
+      .offscreen div {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+      }
   </style>
 </head>
-
-<body>
+<body class="disable-select">
   <center>
     <div>
-      <h1>Minesweeper</h1>
+      <h1 id="maintext">Minesweeper</h1>
       <h2 id="b">Board: 18x14</h2>
       <h2 id="m">Mines: 40</h2>
     </div>
@@ -40,6 +67,20 @@
       <button>&nbsp;&nbsp;&nbsp;&nbsp;</button>
       <button>&nbsp;1&nbsp;</button>
       <button style="font-size: 11.5px;">🚩</button>
+    </div>
+    <div>
+      <div id="winscreen" class="offscreen">
+        <div>
+          <h1>U Win</h1>
+          <button onclick="location.reload()" style="background-color: white; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px; font-size: large;">Retry</button>
+        </div>
+      </div>
+      <div id="losescreen" class="offscreen">
+        <div>
+          <h1>U Lose</h1>
+          <button onclick="location.reload()" style="background-color: white; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px; font-size: large;">Retry</button>
+        </div>
+      </div>
     </div>
   </center>
 </body>
@@ -227,10 +268,11 @@
       }
       else {
         showmines(id)
+        document.getElementById("losescreen").style.display = "block"
       }
     }
     else {
-      if (document.getElementById(id).innerHTML == "?" || document.getElementById(id).innerHTML == "🚩") {
+      if (document.getElementById(id).innerHTML == "?" || (document.getElementById(id).innerHTML == "🚩") && clicked) {
         //F
         if (getmines(id) > 0) {
           document.getElementById(id).innerHTML = getmines(id)
