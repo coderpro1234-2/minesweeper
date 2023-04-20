@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Minesweeper</title>
+    <style>
+      body {
+        background-color: rgb(74, 192, 253);
+      }
+      #board {
+        border: 3px solid black;
+        width: max-content;
+        padding: 0px;
+      }
+      button {
+        padding: 4px;
+        margin: 0px;
+        border: none;
+        background-color: yellowgreen;
+        color: white;
+        width: 22px;
+        height: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <center>
+      <div>
+        <h1>Minesweeper</h1>
+        <h2 id="b">Board: 18x14</h2>
+        <h2 id="m">Mines: 40</h2>
+      </div>
+      <div id="board" style="width: fit-content;">
+      </div>
+      <div id="boards" style="width: fit-content;" hidden>
+        <button>&nbsp;&nbsp;&nbsp;&nbsp;</button>
+        <button>&nbsp;1&nbsp;</button>
+        <button style="font-size: 11.5px;">🚩</button>
+      </div>
+    </center>
+  </body>
+  <script>
+    width = Math.floor(((screen.width - 100)/23)/2)
+    height = Math.floor(((screen.height - 400)/24))
+    density = 10
+    minesnum = Math.floor((width*height)/density)
+    b.innerHTML = "Board: "+width+"x"+height
+    m.innerHTML = "Mines: "+minesnum
+    expandactive = 0
+    expandtile = []
+    firsttile = true
+    alive = true
+    tiles = []
+    mines = []
+    flags = [-1]
+    clicked = []
+    function rand(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    function disableRightClick(e) {
+      e.preventDefault();
+    }
+    document.addEventListener('contextmenu', disableRightClick);
+    function settiles() {
+      minesleft = minesnum
+      document.getElementById("board").innerHTML = ""
+      board = ""
+      id = 0
+      i = 0
+      while (i < height) {
+        e = 0
+        while (e < width) {
+          tiles.push(0)
+          board += "<button id='"+id+"' onclick='pushbutton("+id+")' onmousedown='checkrightclick("+id+",event)'>?</button>"
+          id += 1
+          e ++
+        }
+        board += "<br>"
+        i ++
+      }
+      while (minesleft != 0) {
+        a = rand(0,((width*height)-1))
+        if (mines.includes(a)) {
+          a = 0
+        }
+        else {
+          mines.push(a)
+          minesleft -= 1
+        }
+      }
+      document.getElementById("board").innerHTML = board
+      document.querySelector('button').addEventListener('contextmenu', disableRightClick);
+    }
+    function getblock(tile,dir) {
+      if (dir == "u") {
+        if (tile > (width-1)) {
+          return tile-width
+        }
+        return tile
+      }
+      else if (dir == "ur") {
+        if (tile > (width-1)) {
+          if ((tile % width) != (width-1)) {
+            return tile-(width-1)
+          }
+        }
+        return tile
+      }
+      else if (dir == "r") {
+        if ((tile % width) != (width-1)) {
+          return tile+1
+        }
+        return tile
+      }
+      else if (dir == "dr") {
+        if (tile < (width*height-1)) {
+          if ((tile % width) != (width-1)) {
+            return tile+(width+1)
+          }
+        }
+        return tile
+      }
+      else if (dir == "d") {
+        if (tile < (width*(height-1))) {
+          return tile+(width)
+        }
+        return tile
+      }
+      else if (dir == "dl") {
+        if (tile < (width*height-1)) {
+          if ((tile % width) != 0) {
+            return tile+(width-1)
+          }
+        }
+        return tile
+      }
+      else if (dir == "l") {
+        if ((tile % width) != 0) {
+          return tile-1
+        }
+        return tile
+      }
+      else if (dir == "ul") {
+        if (tile > (width-1)) {
+          if ((tile % width) != 0) {
+            return tile-(width+1)
+          }
+        }
+        return tile
+      }
+      return tile
+    }
+    function getmines(tile) {
+      e = 0
+      if (mines.includes(getblock(tile,"u"))) {e ++}
+      if (mines.includes(getblock(tile,"ur"))) {e ++}
+      if (mines.includes(getblock(tile,"r"))) {e ++}
+      if (mines.includes(getblock(tile,"dr"))) {e ++}
+      if (mines.includes(getblock(tile,"d"))) {e ++}
+      if (mines.includes(getblock(tile,"dl"))) {e ++}
+      if (mines.includes(getblock(tile,"l"))) {e ++}
+      if (mines.includes(getblock(tile,"ul"))) {e ++}
+      return e
+    }
+    function checkrightclick(id,e) {
+      if (e.which == 3) {
+        console.log("rbc?")
+        if (flags.includes(id)) {
+          flags.splice(flags.indexOf(id),flags.indexOf(id))
+          document.getElementById(id).innerHTML = "?"
+          document.getElementById(id).style.backgroundColor = "yellowgreen"
+        }
+        else {
+          if (document.getElementById(id).innerHTML == "?"){
+            if (alive){
+              flags.push(id)
+              document.getElementById(id).innerHTML = "f"
+              document.getElementById(id).style.backgroundColor = "burlywood"
+            }
+          }
+        }
+      }
+    }
+    function showmines(id) {
+      alive = false
+      smines = [id]
+      document.getElementById(id).innerHTML = "*"
+      document.getElementById(id).style.backgroundColor = "hsl("+rand(0,355)+",100%,50%)"
+      mi = 0
+      while (smines.length < mines.length) {
+      document.getElementById(mines[mi]).innerHTML = "*"
+      document.getElementById(mines[mi]).style.backgroundColor = "hsl("+rand(0,355)+",100%,50%)"
+      smines.push(mines[mi])
+      mi ++
+      }
+    }
+    function pushbutton(id) {
+      if (flags.includes(id)) {
+        return ;
+      }
+      if (alive == false) {
+        return ;
+      }
+      if (mines.includes(id)) {
+        if (firsttile) {
+          firsttile = false
+          mines.splice(mines.indexOf(id),mines.indexOf(id))
+          minesleft = 1
+          while (minesleft != 0) {
+            a = rand(0,((width*height)-1))
+            if (mines.includes(a)) {
+              a = 0
+            }
+            else if (a == id) {
+              a = 0
+            }
+            else {
+              mines.push(a)
+              minesleft -= 1
+            }
+          }
+        }
+        else {
+          showmines(id)
+        }
+      }
+      else {
+        if (getmines(id) > 0) {
+          document.getElementById(id).innerHTML = getmines(id)
+          document.getElementById(id).style.backgroundColor = "burlywood"
+        }
+        else {
+          console.log(id)
+          document.getElementById(id).innerHTML = "&nbsp;"
+          document.getElementById(id).style.backgroundColor = "burlywood"
+          if (expandactive == 0) {
+            expandtile = [id]
+          }
+          expandactive += 1
+          if (expandtile.includes(getblock(id,"u")) == false) {
+            expandtile.push(getblock(id,"u"))
+            pushbutton(getblock(id,"u"))
+          }
+          if (expandtile.includes(getblock(id,"r")) == false) {
+            expandtile.push(getblock(id,"r"))
+            pushbutton(getblock(id,"r"))
+          }
+          if (expandtile.includes(getblock(id,"d")) == false) {
+            expandtile.push(getblock(id,"d"))
+            pushbutton(getblock(id,"d"))
+          }
+          if (expandtile.includes(getblock(id,"l")) == false) {
+            expandtile.push(getblock(id,"l"))
+            pushbutton(getblock(id,"l"))
+          }
+            expandactive -= 1
+        }
+      }
+      firsttile = false
+    }
+    settiles()
+  </script>
+</html>
