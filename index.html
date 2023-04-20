@@ -21,7 +21,7 @@
       border: none;
       background-color: yellowgreen;
       color: white;
-      width: 20px;
+      width: 22px;
       height: 26px;
     }
   </style>
@@ -45,7 +45,7 @@
 </body>
 <script>
   width = Math.floor(((window.innerWidth - 0) / 23))
-  height = Math.floor(((window.innerHeight - 200) / 24))
+  height = Math.floor(((window.innerHeight - 250) / 24))
   density = 10
   minesnum = Math.floor((width * height) / density)
   b.innerHTML = "Board: " + width + "x" + height
@@ -75,7 +75,7 @@
       e = 0
       while (e < width) {
         tiles.push(0)
-        board += "<button id='" + id + "' onclick='pushbutton(" + id + ")' onmousedown='checkrightclick(" + id + ",event,false)'>?</button>"
+        board += "<button id='" + id + "' onclick='pushbutton(" + id + ",true)' onmousedown='checkrightclick(" + id + ",event,false)'>?</button>"
         id += 1
         e++
       }
@@ -168,7 +168,6 @@
   }
   function checkrightclick(id, e, force) {
     if (e.which == 3 || force) {
-      console.log("rbc?")
       if (flags.includes(id)) {
         flags.splice(flags.indexOf(id), flags.indexOf(id))
         document.getElementById(id).innerHTML = "?"
@@ -179,7 +178,8 @@
           if (document.getElementById(id).innerHTML != "&nbsp;") {
             if (alive) {
               flags.push(id)
-              document.getElementById(id).innerHTML = "f"
+              document.getElementById(id).innerHTML = "&#128681;"
+              //F
               document.getElementById(id).style.backgroundColor = "burlywood"
             }
           }
@@ -190,21 +190,22 @@
   function showmines(id) {
     alive = false
     smines = [id]
-    document.getElementById(id).innerHTML = "*"
+    document.getElementById(id).innerHTML = "&#128163;"
+    //*
     document.getElementById(id).style.backgroundColor = "hsl(" + rand(0, 355) + ",100%,50%)"
     mi = 0
     while (smines.length < mines.length) {
-      document.getElementById(mines[mi]).innerHTML = "*"
+      document.getElementById(mines[mi]).innerHTML = "&#128163;"
+      //*
       document.getElementById(mines[mi]).style.backgroundColor = "hsl(" + rand(0, 355) + ",100%,50%)"
       smines.push(mines[mi])
       mi++
     }
   }
-  function pushbutton(id) {
+  function pushbutton(id,clicked = false) {
     if (alive == false) {
       return;
     }
-    console.log("hope")
     if (mines.includes(id)) {
       if (firsttile) {
         firsttile = false
@@ -229,13 +230,13 @@
       }
     }
     else {
-      if (document.getElementById(id).innerHTML == "?" || document.getElementById(id).innerHTML == "f") {
+      if (document.getElementById(id).innerHTML == "?" || document.getElementById(id).innerHTML == "🚩") {
+        //F
         if (getmines(id) > 0) {
           document.getElementById(id).innerHTML = getmines(id)
           document.getElementById(id).style.backgroundColor = "burlywood"
         }
         else {
-          console.log(id)
           document.getElementById(id).innerHTML = "&nbsp;"
           document.getElementById(id).style.backgroundColor = "burlywood"
           if (expandactive == 0) {
@@ -265,7 +266,9 @@
         if (flags.includes(id)) {
           flags.splice(flags.indexOf(id), flags.indexOf(id))
         }
-        checkrightclick(id, "secret", true)
+        if (clicked){
+          checkrightclick(id, "secret", true)
+        }
       }
     }
     firsttile = false
