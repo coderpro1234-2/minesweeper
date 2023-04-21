@@ -96,6 +96,8 @@
           <h2 style="color: white;">Settings</h2><button onclick="document.getElementById('settings').style.display = 'none';resetemoji()" style="position: absolute; top: 0px; right: 0px; background-color: red; border: 4px solid black; border-radius: 100%; height: 34px; width: 34px;">x</button>
           <h3 style="color: white;">Emoji:</h3>
           <input id="emojicheck" type="checkbox" checked="true">
+          <h3 style="color: white;">Show Board Size:</h3>
+          <input id="boardcheck" type="checkbox" checked="true">
         </div>
       </div>
     </div>
@@ -107,9 +109,10 @@
   flags = [-1]
   density = 10
   minesnum = Math.floor((width * height) / density)
-  b.innerHTML = "Board: " + width + "x" + height+", Mines: " + minesnum
+  b.innerHTML = "Mines: " + minesnum
   f.innerHTML = "Flags Placed: "+(flags.length-1)
   document.getElementById("emojicheck").checked = true
+  document.getElementById("boardcheck").checked = false
   shovel.style.backgroundColor = "greenyellow"
   expandactive = 0
   n_one = [-1]
@@ -395,5 +398,13 @@
     firsttile = false
   }
   settiles()
+  setInterval(function(){
+    if (document.getElementById("boardcheck").checked) {
+      b.innerHTML = "Board: " + width + "x" + height+", Mines: " + minesnum
+    }
+    else {
+      b.innerHTML = "Mines: " + minesnum
+    }
+  },1)
 </script>
 </html>
