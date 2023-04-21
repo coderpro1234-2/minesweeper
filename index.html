@@ -57,8 +57,9 @@
 <body class="disable-select">
   <center>
     <div>
-      <h1 id="maintext">Minesweeper</h1>
-      <h2 id="b">Board: 18x14</h2>
+      <h2 id="maintext">Minesweeper</h2>
+      <h3 id="b">secrettext</h3>
+      <h3 id="f">secrettext2</h3>
       <button id="shovel" onclick="shovel = true;bomb.style.backgroundColor = 'yellowgreen';document.getElementById('shovel').style.backgroundColor = 'greenyellow';" style="background-color: yellowgreen; color: black; width: auto; height: 30px; border: 2px solid black; border-radius: 10px;">&nbsp;&#9935;&nbsp;</button>
       Controls
       <button id="bomb" onclick="shovel = false;document.getElementById('shovel').style.backgroundColor = 'yellowgreen';bomb.style.backgroundColor = 'greenyellow';" style="background-color: yellowgreen; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px;">&nbsp;&#128163;&nbsp;</button>
@@ -75,13 +76,13 @@
     <div>
       <div id="winscreen" class="offscreen">
         <div>
-          <h1>U Win</h1>
+          <h2>U Win</h2>
           <button onclick="location.reload()" style="background-color: white; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px; font-size: large;">Retry</button>
         </div>
       </div>
       <div id="losescreen" class="offscreen">
         <div>
-          <h1>U Lose</h1>
+          <h2>U Lose</h2>
           <button onclick="location.reload()" style="background-color: white; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px; font-size: large;">Retry</button>
         </div>
       </div>
@@ -91,9 +92,11 @@
 <script>
   width = Math.floor(((window.innerWidth - 0) / 23))
   height = Math.floor(((window.innerHeight - 250) / 24))
+  flags = [-1]
   density = 10
   minesnum = Math.floor((width * height) / density)
   b.innerHTML = "Board: " + width + "x" + height+", Mines: " + minesnum
+  f.innerHTML = "Flags Placed: "+(flags.length-1)
   shovel.style.backgroundColor = "greenyellow"
   expandactive = 0
   n_one = [-1]
@@ -103,7 +106,6 @@
   expandtile = []
   tiles = []
   mines = []
-  flags = [-1]
   clicked = []
   function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -257,6 +259,7 @@
         }
       }
     }
+    f.innerHTML = "Flags Placed: "+(flags.length-1)
   }
   function showmines(id) {
     alive = false
