@@ -99,9 +99,8 @@
   </center>
 </body>
 <script>
-  
   width = Math.floor(((window.innerWidth - 0) / 23))
-  height = Math.floor(((window.innerHeight - 250) / 24))
+  height = Math.floor(((window.innerHeight - 280) / 24))
   flags = [-1]
   density = 10
   minesnum = Math.floor((width * height) / density)
@@ -153,6 +152,16 @@
       document.getElementById("shovel").innerHTML = "Dig"
       document.getElementById("bomb").innerHTML = "Flag"
       document.getElementById("gear").innerHTML = "Settings"
+    }
+    i = 1
+    while (i != flags.length) {
+      if (document.getElementById("emojicheck").checked){
+        document.getElementById(flags[i]).innerHTML = "&#128681"
+      }
+      else {
+        document.getElementById(flags[i]).innerHTML = "F"
+      }
+      i++
     }
   }
   function settiles() {
@@ -340,7 +349,7 @@
       }
     }
     else {
-      if (shovel) {
+      if (shovel && flags.includes(id) == false) {
         if (getmines(id) > 0) {
           document.getElementById(id).innerHTML = getmines(id)
           document.getElementById(id).style.backgroundColor = "burlywood"
@@ -369,14 +378,6 @@
             pushbutton(getblock(id, "l"))
           }
           expandactive -= 1
-        }
-      }
-      else {
-        if (flags.includes(id)) {
-          flags.splice(flags.indexOf(id), flags.indexOf(id))
-        }
-        if (clicked){
-          checkrightclick(id, "secret", true)
         }
       }
     }
