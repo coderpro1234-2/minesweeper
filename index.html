@@ -59,7 +59,11 @@
     <div>
       <h1 id="maintext">Minesweeper</h1>
       <h2 id="b">Board: 18x14</h2>
-      <h2 id="m">Mines: 40</h2>
+      <button id="shovel" onclick="shovel = true;bomb.style.backgroundColor = 'yellowgreen';document.getElementById('shovel').style.backgroundColor = 'greenyellow';" style="background-color: yellowgreen; color: black; width: auto; height: 30px; border: 2px solid black; border-radius: 10px;">&nbsp;&#9935;&nbsp;</button>
+      Controls
+      <button id="bomb" onclick="shovel = false;document.getElementById('shovel').style.backgroundColor = 'yellowgreen';bomb.style.backgroundColor = 'greenyellow';" style="background-color: yellowgreen; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px;">&nbsp;&#128163;&nbsp;</button>
+      <br>
+      <br>
     </div>
     <div id="board" style="width: fit-content;">
     </div>
@@ -89,13 +93,13 @@
   height = Math.floor(((window.innerHeight - 250) / 24))
   density = 10
   minesnum = Math.floor((width * height) / density)
-  b.innerHTML = "Board: " + width + "x" + height
-  m.innerHTML = "Mines: " + minesnum
+  b.innerHTML = "Board: " + width + "x" + height+", Mines: " + minesnum
+  shovel.style.backgroundColor = "greenyellow"
   expandactive = 0
-  pressTimer = 0
+  n_one = [-1]
+  shovel = true
   firsttile = true
   alive = true 
-  oneoff = false
   expandtile = []
   tiles = []
   mines = []
@@ -108,6 +112,24 @@
     e.preventDefault();
   }
   document.addEventListener('contextmenu', disableRightClick);
+  function arrayCompare(_arr1, _arr2) {
+    if (
+      !Array.isArray(_arr1)
+      || !Array.isArray(_arr2)
+      || _arr1.length !== _arr2.length
+      ) {
+        return false;
+      }
+    const arr1 = _arr1.concat().sort();
+    const arr2 = _arr2.concat().sort();
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return false;
+      }
+    }
+    
+    return true;
+}
   function settiles() {
     minesleft = minesnum
     document.getElementById("board").innerHTML = ""
@@ -118,7 +140,7 @@
       e = 0
       while (e < width) {
         tiles.push(0)
-        board += "<button id='" + id + "' onclick='pushbutton(" + id + ",true)' onmousedown='longtap("+id+",event)' onmouseup='clearTimeout(pressTimer)'>?</button>"
+        board += "<button id='" + id + "' onclick='pushbutton(" + id + ",true)' onmousedown='checkrightclick("+id+",event,false)'>?</button>"
         id += 1
         e++
       }
@@ -209,17 +231,6 @@
     if (mines.includes(getblock(tile, "ul"))) { e++ }
     return e
   }
-  function longtap(id,e) {
-    if (e.which == 3){
-      checkrightclick(id,"secret",true)
-    }
-    else {
-      pressTimer = window.setTimeout(function() {
-      checkrightclick(id,"secret",true)
-      oneoff = true
-      },300)
-    }
-  }
   function checkrightclick(id, e, force) {
     if (e.which == 3 || force) {
       if (flags.includes(id)) {
@@ -235,6 +246,12 @@
               document.getElementById(id).innerHTML = "&#128681;"
               //F
               document.getElementById(id).style.backgroundColor = "burlywood"
+              flags2 = flags
+              mines2 = mines
+              mines2 = n_one.concat(mines2)
+              if (arrayCompare(flags2,mines2)) {
+                document.getElementById("winscreen").style.display = "block"
+              }
             }
           }
         }
@@ -257,11 +274,11 @@
     }
   }
   function pushbutton(id,clicked = false) {
-    if (oneoff) {
-      oneoff = false
+    if (alive == false) {
       return;
     }
-    if (alive == false) {
+    if (shovel == false){
+      checkrightclick(id, "secret", true)
       return;
     }
     if (mines.includes(id)) {
@@ -289,7 +306,7 @@
       }
     }
     else {
-      if (document.getElementById(id).innerHTML == "?" || (document.getElementById(id).innerHTML == "🚩") && clicked) {
+      if (shovel) {
         //F
         if (getmines(id) > 0) {
           document.getElementById(id).innerHTML = getmines(id)
