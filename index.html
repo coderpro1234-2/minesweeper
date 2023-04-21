@@ -59,8 +59,8 @@
   <center>
     <div>
       <h2 id="maintext" onclick="testforegg()">Minesweeper</h2>
-      <h3 id="b">Your Browser Does No Support Javascript,</h3>
-      <h3 id="f">Please Enable It To Use Minesweeper.</h3>
+      <h3 hidden id="b">Your Browser Does No Support Javascript,</h3>
+      <h3 hidden id="f">Please Enable It To Use Minesweeper.</h3>
       <button id="shovel" onclick="shovel = true;bomb.style.backgroundColor = 'yellowgreen';document.getElementById('shovel').style.backgroundColor = 'greenyellow';" style="background-color: yellowgreen; color: black; width: auto; height: 30px; border: 2px solid black; border-radius: 10px;">&nbsp;&#9935;&nbsp;</button>
       Controls
       <button id="bomb" onclick="shovel = false;document.getElementById('shovel').style.backgroundColor = 'yellowgreen';bomb.style.backgroundColor = 'greenyellow';" style="background-color: yellowgreen; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px;">&nbsp;&#128681;&nbsp;</button>
@@ -103,7 +103,7 @@
 </body>
 <script>
   width = Math.floor(((window.innerWidth - 0) / 23))
-  height = Math.floor(((window.innerHeight - 280) / 24))
+  height = Math.floor(((window.innerHeight - 200) / 24))
   flags = [-1]
   density = 10
   minesnum = Math.floor((width * height) / density)
@@ -328,7 +328,6 @@
     }
   }
   function pushbutton(id,clicked = false) {
-    f.innerHTML = mines
     if (alive == false) {
       return;
     }
@@ -396,12 +395,5 @@
     firsttile = false
   }
   settiles()
-  setInterval(function() {
-    b.innerHTML = "Board: " + width + "x" + height+", Mines: " + mines.length
-    if (mines.length != (Math.floor((width * height) / density))) {
-      //alert("error")
-      console.log("error!")
-    }
-  },1)
 </script>
 </html>
