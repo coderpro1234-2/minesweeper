@@ -328,6 +328,7 @@
     }
   }
   function pushbutton(id,clicked = false) {
+    f.innerHTML = mines
     if (alive == false) {
       return;
     }
@@ -395,5 +396,11 @@
     firsttile = false
   }
   settiles()
+  setInterval(function() {
+    if (mines.length == 19) {
+      alert("error")
+      console.log("error!")
+    }
+  },1)
 </script>
 </html>
