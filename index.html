@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Minesweeper</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <link rel="icon" href="Icon.png">
   <style>
     body {
       background-color: rgb(74, 192, 253);
@@ -57,9 +58,9 @@
 <body class="disable-select">
   <center>
     <div>
-      <h2 id="maintext">Minesweeper</h2>
-      <h3 id="b">secrettext</h3>
-      <h3 id="f">secrettext2</h3>
+      <h2 id="maintext" onclick="if(prompt('Are you my mum? (true of false)')){document.getElementById('winscreen').style.display = 'block'}">Minesweeper</h2>
+      <h3 id="b">Your Browser Does No Support Javascript,</h3>
+      <h3 id="f">Please Enable It To Use Minesweeper.</h3>
       <button id="shovel" onclick="shovel = true;bomb.style.backgroundColor = 'yellowgreen';document.getElementById('shovel').style.backgroundColor = 'greenyellow';" style="background-color: yellowgreen; color: black; width: auto; height: 30px; border: 2px solid black; border-radius: 10px;">&nbsp;&#9935;&nbsp;</button>
       Controls
       <button id="bomb" onclick="shovel = false;document.getElementById('shovel').style.backgroundColor = 'yellowgreen';bomb.style.backgroundColor = 'greenyellow';" style="background-color: yellowgreen; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px;">&nbsp;&#128681;&nbsp;</button>
@@ -78,13 +79,15 @@
     <div>
       <div id="winscreen" class="offscreen">
         <div>
-          <h2>U Win</h2>
+          <h2>You Win</h2>
+          <h3>Well Done!</h3>
           <button onclick="location.reload()" style="background-color: white; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px; font-size: large;">Retry</button>
         </div>
       </div>
       <div id="losescreen" class="offscreen">
         <div>
-          <h2>U Lose</h2>
+          <h2>You Lose</h2>
+          <h3>Good Luck Next Time.</h3>
           <button onclick="location.reload()" style="background-color: white; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px; font-size: large;">Retry</button>
         </div>
       </div>
@@ -385,5 +388,4 @@
   }
   settiles()
 </script>
-
 </html>
