@@ -62,7 +62,9 @@
       <h3 id="f">secrettext2</h3>
       <button id="shovel" onclick="shovel = true;bomb.style.backgroundColor = 'yellowgreen';document.getElementById('shovel').style.backgroundColor = 'greenyellow';" style="background-color: yellowgreen; color: black; width: auto; height: 30px; border: 2px solid black; border-radius: 10px;">&nbsp;&#9935;&nbsp;</button>
       Controls
-      <button id="bomb" onclick="shovel = false;document.getElementById('shovel').style.backgroundColor = 'yellowgreen';bomb.style.backgroundColor = 'greenyellow';" style="background-color: yellowgreen; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px;">&nbsp;&#128163;&nbsp;</button>
+      <button id="bomb" onclick="shovel = false;document.getElementById('shovel').style.backgroundColor = 'yellowgreen';bomb.style.backgroundColor = 'greenyellow';" style="background-color: yellowgreen; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px;">&nbsp;&#128681;&nbsp;</button>
+      Settings:
+      <button id="gear" onclick="document.getElementById('settings').style.display = 'block'" style="background-color: yellowgreen; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px;">&nbsp;⚙️&nbsp;</button>
       <br>
       <br>
     </div>
@@ -86,10 +88,18 @@
           <button onclick="location.reload()" style="background-color: white; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px; font-size: large;">Retry</button>
         </div>
       </div>
+      <div id="settings" class="offscreen">
+        <div style="width: 100%; height: 100%;">
+          <h2 style="color: white;">Settings</h2><button onclick="document.getElementById('settings').style.display = 'none';resetemoji()" style="position: absolute; top: 0px; right: 0px; background-color: red; border: 4px solid black; border-radius: 100%; height: 34px; width: 34px;">x</button>
+          <h3 style="color: white;">Emoji:</h3>
+          <input id="emojicheck" type="checkbox" checked="true">
+        </div>
+      </div>
     </div>
   </center>
 </body>
 <script>
+  
   width = Math.floor(((window.innerWidth - 0) / 23))
   height = Math.floor(((window.innerHeight - 250) / 24))
   flags = [-1]
@@ -97,6 +107,7 @@
   minesnum = Math.floor((width * height) / density)
   b.innerHTML = "Board: " + width + "x" + height+", Mines: " + minesnum
   f.innerHTML = "Flags Placed: "+(flags.length-1)
+  document.getElementById("emojicheck").checked = true
   shovel.style.backgroundColor = "greenyellow"
   expandactive = 0
   n_one = [-1]
@@ -131,7 +142,19 @@
     }
     
     return true;
-}
+  }
+  function resetemoji() {
+    if (document.getElementById("emojicheck").checked) {
+      document.getElementById("shovel").innerHTML = "&nbsp;&#9935;&nbsp;"
+      document.getElementById("bomb").innerHTML = "&nbsp;&#128681;&nbsp;"
+      document.getElementById("gear").innerHTML = "&nbsp;⚙️&nbsp;"
+    }
+    else {
+      document.getElementById("shovel").innerHTML = "Dig"
+      document.getElementById("bomb").innerHTML = "Flag"
+      document.getElementById("gear").innerHTML = "Settings"
+    }
+  }
   function settiles() {
     minesleft = minesnum
     document.getElementById("board").innerHTML = ""
@@ -245,8 +268,12 @@
           if (document.getElementById(id).innerHTML != "&nbsp;") {
             if (alive) {
               flags.push(id)
-              document.getElementById(id).innerHTML = "&#128681;"
-              //F
+              if (document.getElementById("emojicheck").checked) {
+                document.getElementById(id).innerHTML = "&#128681;"
+              }
+              else{
+                document.getElementById(id).innerHTML = "F"
+              }
               document.getElementById(id).style.backgroundColor = "burlywood"
               flags2 = flags
               mines2 = mines
@@ -264,13 +291,17 @@
   function showmines(id) {
     alive = false
     smines = [id]
-    document.getElementById(id).innerHTML = "&#128163;"
-    //*
+    document.getElementById(id).innerHTML = "*"
+    if (document.getElementById("emojicheck").checked) {
+      document.getElementById(id).innerHTML = "&#128163;"
+    }
     document.getElementById(id).style.backgroundColor = "hsl(" + rand(0, 355) + ",100%,50%)"
     mi = 0
     while (smines.length < mines.length) {
-      document.getElementById(mines[mi]).innerHTML = "&#128163;"
-      //*
+      document.getElementById(mines[mi]).innerHTML = "*"
+      if (document.getElementById("emojicheck").checked) {
+        document.getElementById(mines[mi]).innerHTML = "&#128163;"
+      }
       document.getElementById(mines[mi]).style.backgroundColor = "hsl(" + rand(0, 355) + ",100%,50%)"
       smines.push(mines[mi])
       mi++
@@ -310,7 +341,6 @@
     }
     else {
       if (shovel) {
-        //F
         if (getmines(id) > 0) {
           document.getElementById(id).innerHTML = getmines(id)
           document.getElementById(id).style.backgroundColor = "burlywood"
