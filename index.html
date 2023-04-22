@@ -87,6 +87,8 @@
       <div id="losescreen" class="offscreen">
         <div>
           <h2>You Lose</h2>
+          <h3 id="cf">Correct Flags: </h3>
+          <h3 id="if">Incorrect Flags: </h3>
           <h3>Good Luck Next Time.</h3>
           <button onclick="location.reload()" style="background-color: white; color: black; width: auto; height: auto; border: 2px solid black; border-radius: 10px; font-size: large;">Retry</button>
         </div>
@@ -329,6 +331,27 @@
       smines.push(mines[mi])
       mi++
     }
+    i = 1
+    ifv = 0
+    cf = 0
+    while (i < flags.length) {
+      document.getElementById(flags[i]).style.backgroundColor = "burlywood"
+      if (mines.includes(flags[i])) {
+        cf ++
+        document.getElementById(flags[i]).innerHTML = "F"
+        if (document.getElementById("emojicheck").checked) {
+          document.getElementById(flags[i]).innerHTML = "&#128681;"
+        }
+      }
+      else {
+        ifv ++
+        document.getElementById(flags[i]).innerHTML = "x"
+        if (document.getElementById("emojicheck").checked) {
+          document.getElementById(flags[i]).innerHTML = "&#10060;"
+        }
+      }
+      i++
+    }
   }
   function pushbutton(id,clicked = false) {
     if (alive == false) {
@@ -359,6 +382,8 @@
       }
       else {
         showmines(id)
+        document.getElementById("cf").innerHTML = "Correct Flags: "+cf
+        document.getElementById("if").innerHTML = "Incorrect Flags: "+ifv
         document.getElementById("losescreen").style.display = "block"
       }
     }
