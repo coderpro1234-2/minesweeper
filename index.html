@@ -129,7 +129,7 @@
   density = geturlparam("diff",10,true)
   minesnum = Math.floor((width * height) / density)
   if (minesnum == 0) {
-    minesnum = 5
+    minesnum = 1
   }
   b.innerHTML = "Mines: " + minesnum
   f.innerHTML = "Flags Placed: "+(flags.length-1)
