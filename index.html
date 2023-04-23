@@ -329,7 +329,8 @@
   function checkrightclick(id, e, force) {
     if (e.which == 3 || force) {
       if (flags.includes(id)) {
-        flags.splice(flags.indexOf(id), flags.indexOf(id))
+        b = flags.indexOf(id)
+        flags.splice(b, b)
         document.getElementById(id).innerHTML = "?"
         document.getElementById(id).style.backgroundColor = "yellowgreen"
       }
@@ -475,6 +476,7 @@
     else {
       b.innerHTML = "Mines: " + minesnum
     }
+    f.innerHTML = "Flags Placed: "+(flags.length-1)
   },1)
 </script>
 </html>
