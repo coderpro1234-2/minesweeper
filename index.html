@@ -53,6 +53,14 @@
         transform: translate(-50%, -50%);
         margin: 0;
       }
+      .defbutton {
+        background-color: yellowgreen;
+        color: black;
+        width: auto;
+        height: auto;
+        border: 2px solid black;
+        border-radius: 10px;
+      }
   </style>
 </head>
 <body class="disable-select">
@@ -100,16 +108,22 @@
           <input id="emojicheck" type="checkbox" checked="true">
           <h3 style="color: white;">Show Board Size:</h3>
           <input id="boardcheck" type="checkbox" checked="true">
+          <h3 style="color: white;">Difficulty:</h3>
+          <button class="defbutton" onclick="window.location.href = defurl+25">&nbsp;Easy&nbsp;</button>
+          <button class="defbutton" onclick="window.location.href = defurl+10">&nbsp;Medium&nbsp;</button>
+          <button class="defbutton" onclick="window.location.href = defurl+5">&nbsp;Hard&nbsp;</button>
+          <button class="defbutton" onclick="window.location.href = defurl+2">&nbsp;Impossible&nbsp;</button>
         </div>
       </div>
     </div>
   </center>
 </body>
 <script>
+  defurl = "https://coderpro1234-2.github.io/minesweeper/?diff="
   width = Math.floor(((window.innerWidth - 0) / 23))
   height = Math.floor(((window.innerHeight - 270) / 24))
   flags = [-1]
-  density = 10
+  density = geturlparam("diff",10,true)
   minesnum = Math.floor((width * height) / density)
   b.innerHTML = "Mines: " + minesnum
   f.innerHTML = "Flags Placed: "+(flags.length-1)
@@ -125,6 +139,37 @@
   tiles = []
   mines = []
   clicked = []
+  function geturlparam(param,def = 0,num = true) {
+    urll = window.location.href
+    if (urll.includes("?") == false) {
+      return def
+    }
+    if (urll.indexOf(param+"=")) {
+      i = urll.indexOf(param+"=")+param.length
+      fin = true
+      exit = "" 
+      while (fin) {
+        i++
+        if (urll[i] == "&" || i == urll.length) {
+          fin = false
+        }
+        else {
+          exit += urll[i]
+        }
+      }
+      if (num) {
+        try {
+          exit = Number(exit)
+        }
+        catch {
+          return def
+        }
+      }
+      return exit
+    }
+    return def
+  }
+  
   function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
