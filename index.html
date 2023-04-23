@@ -66,6 +66,7 @@
 <body class="disable-select">
   <center>
     <div>
+      <button class="defbutton" onclick="window.location.href = defurl" style="position: absolute; top: 20px; left: 10px;">Home</button>
       <h2 id="maintext" onclick="testforegg()">Minesweeper</h2>
       <h3 id="b">Your Browser Does No Support Javascript,</h3>
       <h3 id="f">Please Enable It To Use Minesweeper.</h3>
@@ -109,17 +110,19 @@
           <h3 style="color: white;">Show Board Size:</h3>
           <input id="boardcheck" type="checkbox" checked="true">
           <h3 style="color: white;">Difficulty:</h3>
-          <button class="defbutton" onclick="window.location.href = defurl+25">&nbsp;Easy&nbsp;</button>
-          <button class="defbutton" onclick="window.location.href = defurl+10">&nbsp;Medium&nbsp;</button>
-          <button class="defbutton" onclick="window.location.href = defurl+5">&nbsp;Hard&nbsp;</button>
-          <button class="defbutton" onclick="window.location.href = defurl+2">&nbsp;Impossible&nbsp;</button>
+          <button class="defbutton" onclick="window.location.href = defurl+'?diff='+40">&nbsp;Easy+&nbsp;</button>
+          <button class="defbutton" onclick="window.location.href = defurl+'?diff='+25">&nbsp;Easy&nbsp;</button>
+          <button class="defbutton" onclick="window.location.href = defurl+'?diff='+10">&nbsp;Medium&nbsp;</button>
+          <button class="defbutton" onclick="window.location.href = defurl+'?diff='+5">&nbsp;Hard&nbsp;</button>
+          <button class="defbutton" onclick="window.location.href = defurl+'?diff='+2">&nbsp;Impossible&nbsp;</button>
+          <button class="defbutton" onclick="window.location.href = defurl+'?diff='+1.5">&nbsp;Impossible+&nbsp;</button>
         </div>
       </div>
     </div>
   </center>
 </body>
 <script>
-  defurl = "https://coderpro1234-2.github.io/minesweeper/?diff="
+  defurl = 'https://coderpro1234-2.github.io/main/'
   width = Math.floor(((window.innerWidth - 0) / 23))
   height = Math.floor(((window.innerHeight - 270) / 24))
   flags = [-1]
