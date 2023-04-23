@@ -128,6 +128,9 @@
   flags = [-1]
   density = geturlparam("diff",10,true)
   minesnum = Math.floor((width * height) / density)
+  if (minesnum == 0) {
+    minesnum = 5
+  }
   b.innerHTML = "Mines: " + minesnum
   f.innerHTML = "Flags Placed: "+(flags.length-1)
   document.getElementById("emojicheck").checked = true
